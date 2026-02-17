@@ -1,0 +1,48 @@
+body {
+	font-family: Arial, Helvetica, sans-serif;
+	padding: 24px;
+}
+
+.panel {
+	width: min(370px, 100%);
+	border: 1px solid #000;
+	border-radius: 5px;
+	padding: 16px;
+}
+
+.grid {
+	display: grid;
+	grid-template-columns: repeat(3, max-content);
+	justify-content: space-between;
+	column-gap: 24px;
+	row-gap: 10px;
+	align-items: start;
+}
+
+.cell {
+	display: grid;
+	grid-template-rows: auto auto;
+	justify-items: center;
+}
+
+.cell button {
+	width: max-content;
+	padding: 10px 14px;
+	border: 1px solid #555;
+	background: #eeeeee;
+	border-radius: 10px;
+	cursor: pointer;
+	white-space: nowrap;
+}
+
+.cell .label {
+	text-align: center;
+	white-space: nowrap;
+	font-size: 14px;
+	line-height: 1.2;
+}
+
+
+.error {
+	color: red;
+}

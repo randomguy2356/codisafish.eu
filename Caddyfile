@@ -1,0 +1,20 @@
+codisafish.eu {
+	root * /srv
+	file_server
+
+	header {
+		Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
+		X-Content-Type-Options "nosniff"
+		X-Frame-Options "DENY"
+		Referrer-Policy "no-referrer"
+		Permissions-Policy "geolocation=(), microphone=(), camera=()"
+		Content-Security-Policy "default-src 'self'; connect-src 'self'; object-src 'none'; base-uri 'self'; frame-ancestors 'none'; upgrade-insecure-requests"
+	}
+
+	encode zstd gzip
+	
+	@js path *.js
+    header @js Cache-Control "no-store"
+	
+	reverse_proxy /api/* backend:5000
+}

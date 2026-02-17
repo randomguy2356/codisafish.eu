@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+
+<html lang=en>
+<head>
+	<meta charset="UTF-8">
+	<title>Cod is a fish</title>
+	<meta name="viewport" content="width=device_width, initial-scale=1" />
+	<link rel="stylesheet" href="app.css">
+</head>
+
+<body>
+	<div>
+	<input id="a_elo" type="number" placeholder="player a elo">
+	<input id="b_elo" type="number" placeholder="player b elo">
+	</div>
+
+	<div class="panel">
+		<div class="grid">
+			<div class="cell">			
+				<button id="a_won">Player A won</button>
+				<div class="label" id="a_won_delta">a: 16, b: -16</div>
+			</div>
+			<div class="cell">
+				<button id="draw">draw</button>
+				<div class="label" id="draw_delta">a: 0, b: 0</div>
+			</div>
+			<div class="cell">
+				<button id="b_won">Player B won</button>
+				<div class="label" id="b_won_delta">a: -16, b: 16</div>
+			</div>
+		</div>
+	</div>
+
+	<p id="error_msg" class="error"></p>
+
+	<script src="/app.js" defer></script>
+
+</body>
+</html>
