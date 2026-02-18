@@ -26,8 +26,36 @@ services:
     restart: unless-stopped
     expose:
       - "5000"
+    environment:
+      DB_HOST: mariadb
+      DB_PORT: "3306"
+      DB_NAME: backend_db
+      DB_USER: backend
+      DB_PASSWORD: backendpass
+    depends_on:
+      mariadb:
+        condition: service_healthy
+
+  mariadb:
+    image: mariadb:11.4
+    container_name: mariadb
+    restart: unless-stopped
+    environment:
+      MARIADB_ROOT_PASSWORD: rootpass
+      MARIADB_DATABASE: backend_db
+      MARIADB_USER: backend
+      MARIADB_PASSWORD: backendpass
+    volumes:
+      - mariadb_data:/var/lib/mysql
+      - ./db/init:/docker-entrypoint-initdb.d:ro
+    healthcheck:
+      test: ["CMD-SHELL", "mariadb-admin ping -h 127.0.0.1 -u root -p$$MARIADB_ROOT_PASSWORD --silent"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
 
 volumes:
   caddy_data:
   caddy_config:
+  mariadb_data:
 

@@ -1,11 +1,18 @@
 package main
 
 import (
+	"context"
+	"database/sql"
 	"encoding/json"
+	"fmt"
 	"log"
 	"math"
 	"net/http"
+	"os"
 	"strconv"
+	"time"
+
+	_ "github.com/go-sql-driver/mysql"
 )
 
 type GameRequest struct {
@@ -102,7 +109,61 @@ func gameHandler(writer http.ResponseWriter, request *http.Request) {
 	})
 }
 
+func DB_connect() (*sql.DB, error) {
+	host := os.Getenv("DB_HOST")
+	port := os.Getenv("DB_PORT")
+	name := os.Getenv("DB_NAME")
+	user := os.Getenv("DB_USER")
+	pass := os.Getenv("DB_PASSWORD")
+
+	if host == "" || port == "" || name == "" || user == "" || pass == "" {
+		return nil, fmt.Errorf("missing required DB environment variables")
+	}
+
+	dsn := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?parseTime=true",
+		user, pass, host, port, name,
+	)
+
+	db, err := sql.Open("mysql", dsn)
+	if err != nil {
+		return nil, err
+	}
+
+	db.SetMaxOpenConns(25)
+	db.SetMaxIdleConns(25)
+	db.SetConnMaxLifetime(5 * time.Minute)
+
+	if err := db.Ping(); err != nil {
+		return nil, err
+	}
+
+	return db, nil
+}
+
+func dbtest() {
+	db, err := DB_connect()
+
+	if err != nil {
+		log.Fatalf("we fucked: %v", err)
+	}
+	defer db.Close()
+
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
+
+	var version string
+	err = db.QueryRowContext(ctx, "SELECT VERSION()").Scan(&version)
+	if err != nil {
+		log.Fatalf("we fucked up againg: %v", err)
+	}
+
+	println("Connected to: ", version)
+}
+
 func main() {
+
+	dbtest()
+
 	mux := http.NewServeMux()
 	mux.HandleFunc("/api/game", gameHandler)
 
