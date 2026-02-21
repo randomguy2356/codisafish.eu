@@ -40,6 +40,10 @@ services:
     image: mariadb:11.4
     container_name: mariadb
     restart: unless-stopped
+    
+    ports:
+      - "3306:3306"
+
     environment:
       MARIADB_ROOT_PASSWORD: rootpass
       MARIADB_DATABASE: backend_db

@@ -63,7 +63,8 @@ function calc_deltas(){
 
 	expected_score_a = 1 / (1 + (10 ** ((b_elo - a_elo) / 400)))
 	
-	expected_score_lable.textContent = expected_score_a
+	expected_score_percent = ((Math.round(expected_score_a * 10000)) / 100.0)
+	expected_score_lable.textContent = "" + Number(expected_score_percent.toFixed(2)).toString() + " / " + Number((100 - expected_score_percent).toFixed(2)).toString()
 	
 	a_won_a_delta = k * (1 - expected_score_a)
 	draw_a_delta = k * (0.5 - expected_score_a)
@@ -78,9 +79,9 @@ function calc_deltas(){
 	
 	
 	
-	a_won_delta_label.textContent = ("A: " + -(a_elo_raw - (a_elo + a_won_a_delta)).toFixed(2) + ", B: " + -(b_elo_raw - (b_elo - a_won_a_delta)).toFixed(2))
-	draw_delta_label.textContent = ("A: " + -(a_elo_raw - (a_elo + draw_a_delta)).toFixed(2) + ", B: " + -(b_elo_raw - (b_elo - draw_a_delta)).toFixed(2))
-	b_won_delta_label.textContent = ("A: " + -(a_elo_raw - (a_elo + b_won_a_delta)).toFixed(2) + ", B: " + -(b_elo_raw - (b_elo - b_won_a_delta)).toFixed(2))
+	a_won_delta_label.textContent = ("A: " + -(a_elo_raw - (a_elo + a_won_a_delta)).toFixed(2) + "\n B: " + -(b_elo_raw - (b_elo - a_won_a_delta)).toFixed(2))
+	draw_delta_label.textContent = ("A: " + -(a_elo_raw - (a_elo + draw_a_delta)).toFixed(2) + "\n B: " + -(b_elo_raw - (b_elo - draw_a_delta)).toFixed(2))
+	b_won_delta_label.textContent = ("A: " + -(a_elo_raw - (a_elo + b_won_a_delta)).toFixed(2) + "\n B: " + -(b_elo_raw - (b_elo - b_won_a_delta)).toFixed(2))
 }
 
 function a_won(event){

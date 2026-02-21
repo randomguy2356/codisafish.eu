@@ -9,12 +9,11 @@
 </head>
 
 <body>
-	<div>
-	<input id="a_elo" type="number" placeholder="player a elo">
-	<input id="b_elo" type="number" placeholder="player b elo">
-	</div>
-
 	<div class="panel">
+		<div class="input">
+			<input id="a_elo" placeholder="player a elo">
+			<input id="b_elo" placeholder="player b elo">
+		</div>
 		<div class="grid">
 			<div class="cell">			
 				<button id="a_won">Player A won</button>
@@ -29,9 +28,12 @@
 				<p class="label" id="b_won_delta"></p>
 			</div>
 		</div>
+		<div class="percentage">
+			<p id="expected_score"></p>
+		</div>
 	</div>
 	
-	<p id="expected_score"></p>
+
 
 	<p id="error_msg" class="error"></p>
 

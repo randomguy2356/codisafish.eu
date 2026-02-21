@@ -12,6 +12,7 @@ import (
 	"strconv"
 	"time"
 
+	_ "github.com/alexedwards/argon2id"
 	_ "github.com/go-sql-driver/mysql"
 )
 
@@ -26,6 +27,15 @@ type GameResponse struct {
 	Aelo  string `json:"a_elo"`
 	Belo  string `json:"b_elo"`
 	Error string `json:"error,omitempty"`
+}
+
+func main() {
+
+	mux := http.NewServeMux()
+	mux.HandleFunc("/api/game", gameHandler)
+
+	log.Println("listening on :5000")
+	log.Fatal(http.ListenAndServe(":5000", mux))
 }
 
 func writeJSON(writer http.ResponseWriter, status int, response any) {
@@ -50,6 +60,8 @@ func calculate_elo(K float64, Aelo float64, Belo float64, scoreA float64) (float
 	}
 
 	Adelta = math.Round(Adelta*100) / 100
+
+	log_elo(Aelo, Belo, Adelta, Aelo+Adelta, Belo-Adelta)
 
 	return Aelo + Adelta, Belo - Adelta
 }
@@ -109,6 +121,32 @@ func gameHandler(writer http.ResponseWriter, request *http.Request) {
 	})
 }
 
+// DB logging
+
+func log_elo(a float64, b float64, delta float64, a_new float64, b_new float64) error {
+	db, err := DB_connect()
+
+	if err != nil {
+		log.Println("failed to connect to database: ", err.Error())
+		return err
+	}
+
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
+	query := "INSERT INTO transactions (a, b, delta, a_new, b_new) VALUES (?, ?, ?, ?, ?)"
+
+	_, err = db.ExecContext(ctx, query, a, b, delta, a_new, b_new)
+
+	if err != nil {
+		log.Println("error while inserting: ", err.Error())
+		return err
+	}
+
+	return nil
+}
+
+//--DB stuff
+
 func DB_connect() (*sql.DB, error) {
 	host := os.Getenv("DB_HOST")
 	port := os.Getenv("DB_PORT")
@@ -144,29 +182,28 @@ func dbtest() {
 	db, err := DB_connect()
 
 	if err != nil {
-		log.Fatalf("we fucked: %v", err)
+		log.Fatalf("error: %v", err)
 	}
 	defer db.Close()
+
+	hash := "$argon2id$v=19$m=65536,t=1,p=4$kaoO+n/58AUyNzG/17SVkg$fB0iMWEU1Zwro8QPTexI4YfkJ9FQ6nUh7TQSSR0LDPI"
 
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 
-	var version string
-	err = db.QueryRowContext(ctx, "SELECT VERSION()").Scan(&version)
-	if err != nil {
-		log.Fatalf("we fucked up againg: %v", err)
+	var id string
+	var username string
+	var email string
+	var password_hash string
+	var created_at string
+	err = db.QueryRowContext(ctx, "SELECT * FROM users").Scan(&id, &username, &email, &password_hash, &created_at)
+	if err == sql.ErrNoRows {
+		db.Exec("ALTER TABLE users AUTO_INCREMENT = 1")
+		db.Exec(fmt.Sprintf("INSERT INTO users (id, username, email, password_hash) values (1, 'admin', 'trocheniefajnie@gmail.com', '%s')", hash))
 	}
-
-	println("Connected to: ", version)
-}
-
-func main() {
-
-	dbtest()
-
-	mux := http.NewServeMux()
-	mux.HandleFunc("/api/game", gameHandler)
-
-	log.Println("listening on :5000")
-	log.Fatal(http.ListenAndServe(":5000", mux))
+	err = db.QueryRowContext(ctx, "SELECT * FROM users WHERE id=1").Scan(&id, &username, &email, &password_hash, &created_at)
+	if err != nil {
+		log.Fatalf("error: %v", err)
+	}
+	println("| ", id, " | ", username, " | ", email, " | ", password_hash, " | ", created_at, " |")
 }
