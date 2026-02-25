@@ -7,8 +7,10 @@ body {
 	width: fit-content;
 	min-width: min(300px, 100%);
 	border: 1px solid #000;
-	border-radius: 5px;
+	border-radius: 10px;
 	padding: 16px;
+	margin: 10px;
+	
 }
 
 .input {
@@ -71,6 +73,20 @@ body {
 	text-align: center;
 }
 
+.database {
+	max-height: 300px;
+	max-width: fit-content;
+	overflow-y: auto;
+	border: 1px solid #555;
+	border-radius: 10px;
+	margin: 10px;
+}
+
+.transactions{
+	margin: 10px;
+	padding-left: 20px;
+	padding-right: 20px;
+}
 
 .error {
 	color: red;

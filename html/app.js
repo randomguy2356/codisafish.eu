@@ -10,6 +10,9 @@ let expected_score_lable = document.getElementById("expected_score")
 let a_elo_inpt = document.getElementById("a_elo")
 let b_elo_inpt = document.getElementById("b_elo")
 
+let list = document.getElementById("transactions")
+var last_index = 0
+
 let error_msg = document.getElementById("error_msg")
 
 a_won_btn.addEventListener("click", a_won)
@@ -18,7 +21,9 @@ b_won_btn.addEventListener("click", b_won)
 
 a_elo_inpt.addEventListener("input", calc_deltas)
 b_elo_inpt.addEventListener("input", calc_deltas)
+
 calc_deltas()
+do_list()
 
 async function game(K, a_elo, b_elo, score_a){
 	const response = await fetch("/api/game", {
@@ -51,6 +56,7 @@ async function game(K, a_elo, b_elo, score_a){
 	b_elo_inpt.value = b_elo_new
 	
 	calc_deltas()
+	do_list()
 }
 
 function calc_deltas(){
@@ -140,4 +146,35 @@ function b_won(event){
 	var K = 32
 
 	game(K, a_elo, b_elo, score_a)
+}
+
+async function do_list(){
+	const response = await fetch("api/transactions", {
+		method: "POST",
+		headers: {
+			"Content-Type": "application/json"
+		},
+		body: JSON.stringify({last_index: last_index, limit: 20})
+	})
+
+	let body = null
+	try {
+		body = await response.json()
+	} catch{
+		error_msg.textContent = `error: bad response`
+	}
+
+	if (!response.ok){
+		error_response = (body && typeof body.error === 'string' && body.error.trim()) || 'no error response'
+		error_msg.textContent = `error ${response.status}: ${error_response}`
+		return
+	}
+	
+	list.innerHTML = "";
+	
+	body.entries.forEach(element => {
+		const li = document.createElement("li");
+		li.textContent = element
+		list.appendChild(li);
+	});
 }
