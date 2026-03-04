@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+
+<head>
+	<meta charset="UTF-8">
+	<title>Cod is a fish</title>
+	<meta name="viewport" content="width=device_width, initial-scale=1">
+	<link rel="stylesheet" href="./style.css">
+</head>
+
+<body>
+  <div class="panel">
+    <div class="field">
+      <p class="label">username:</p>
+      <input type="text" id="username">
+      <p class="error" id="username_err"></p>
+    </div>
+    <div class="field">
+      <p class="label">email:</p>
+      <input type="email" id="email">
+      <p class="error" id="email_err"></p>
+    </div>
+    <div class="field">
+      <p class="label">password:</p>
+      <input autocomplete="current-password" id="password" type="password">
+      <p class="error" id="password_err"></p>
+    </div>
+    <button type="submit" id="register">register</button>
+  </div>
+
+  <p class="error" id="error_msg"></p>
+  <script src="script.js"></script>
+</body>
+

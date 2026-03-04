@@ -8,13 +8,32 @@ const msg = document.getElementById("msg")
 
 login_btn.addEventListener("click", log_in)
 
+check_user()
+
+async function check_user() {
+  const response = await fetch("/api/auth/userinfo", {
+    method: "GET",
+  })
+  
+  let body = null
+  try {
+    body = await response.json()
+  } catch {
+    console.log("bad response")
+  }
+  
+  if (body.exists) {
+    window.location.href = "/"
+  }
+}
+
 async function log_in(event){
   event.preventDefault()
   
   error_msg.textContent = ""
   msg.textContent = ""
   
-  const response = await fetch("/api/auth", {
+  const response = await fetch("/api/auth/login", {
     method: "POST",
     headers: {
   		"Content-Type": "application/json"
@@ -25,8 +44,12 @@ async function log_in(event){
   let body = null;
   try {
     body = await response.json()
-  } catch {
-    error_msg.textContent = `error: bad response`
+  }catch {
+    if (!response.ok){
+      error_msg.textContent = `error ${response.status}`
+      return
+    }
+    window.location.href = "/"
   }
   
   if (!response.ok){
@@ -36,10 +59,9 @@ async function log_in(event){
   }
   
   if (body.error){
-    error_msg.textContent = `application error: ${body.error.trim()}`
+    msg.textContent = `${body.error.trim()}`
     return
   }
 
-  msg.textContent = body.msg
-  
+  window.location.href = "/"
 }

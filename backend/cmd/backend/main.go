@@ -12,8 +12,11 @@ import (
 	"time"
 
 	"codisafish.eu/app/internal/router"
+	"github.com/alexedwards/argon2id"
 	_ "github.com/alexedwards/argon2id"
 	_ "github.com/go-sql-driver/mysql"
+	"github.com/jaswdr/faker/v2"
+	_ "github.com/jaswdr/faker/v2"
 )
 
 func main() {
@@ -23,9 +26,9 @@ func main() {
 		log.Fatal("error while connecting to database: ", err)
 	}
 
-	//	mux := http.NewServeMux()
-	//	mux.HandleFunc("/api/game", gameHandler)
-	//	mux.HandleFunc("/api/transactions", fetch_transactions)
+	//if err := add_more_users(db); err != nil {
+	//	log.Fatal("failed to add example users: ", err.Error())
+	//}
 
 	handler := router.NewRouter(router.Deps{DB: db})
 
@@ -79,4 +82,56 @@ func DB_connect() (*sql.DB, error) {
 	}
 
 	return db, nil
+}
+
+func add_more_users(db *sql.DB) error {
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
+
+	tx, err := db.BeginTx(ctx, &sql.TxOptions{})
+
+	if err != nil {
+		return err
+	}
+
+	stmt1, err := tx.PrepareContext(ctx, "INSERT INTO users (username, email, password_hash) VALUES (?, ?, ?)")
+
+	if err != nil {
+		return err
+	}
+
+	defer stmt1.Close()
+
+	stmt2, err := tx.PrepareContext(ctx, "INSERT INTO username_password (username, password) VALUES (?, ?)")
+
+	if err != nil {
+		return err
+	}
+
+	defer stmt2.Close()
+
+	for range 100 {
+		faker := faker.New()
+		username := faker.Internet().User()
+		email := faker.Internet().Email()
+		password := faker.Internet().Password()
+		password_hash, err := argon2id.CreateHash(password, argon2id.DefaultParams)
+		if err != nil {
+			return err
+		}
+
+		if _, err = stmt1.ExecContext(ctx, username, email, password_hash); err != nil {
+			return err
+		}
+
+		if _, err = stmt2.ExecContext(ctx, username, password); err != nil {
+			return err
+		}
+	}
+
+	if err = tx.Commit(); err != nil {
+		return err
+	}
+
+	return nil
 }

@@ -1,19 +1,24 @@
-let a_won_btn = document.getElementById("a_won")
-let a_won_delta_label = document.getElementById("a_won_delta")
-let draw_btn = document.getElementById("draw")
-let draw_delta_label = document.getElementById("draw_delta")
-let b_won_btn = document.getElementById("b_won")
-let b_won_delta_label = document.getElementById("b_won_delta")
+const login_link = document.getElementById("login")
+const logout_link = document.getElementById("logout")
+const register_link = document.getElementById("register")
+const account_name = document.getElementById("account_name")
 
-let expected_score_lable = document.getElementById("expected_score")
+const a_won_btn = document.getElementById("a_won")
+const a_won_delta_label = document.getElementById("a_won_delta")
+const draw_btn = document.getElementById("draw")
+const draw_delta_label = document.getElementById("draw_delta")
+const b_won_btn = document.getElementById("b_won")
+const b_won_delta_label = document.getElementById("b_won_delta")
 
-let a_elo_inpt = document.getElementById("a_elo")
-let b_elo_inpt = document.getElementById("b_elo")
+const expected_score_lable = document.getElementById("expected_score")
 
-let list = document.getElementById("transactions")
+const a_elo_inpt = document.getElementById("a_elo")
+const b_elo_inpt = document.getElementById("b_elo")
+
+const list = document.getElementById("transactions")
 var last_index = 0
 
-let error_msg = document.getElementById("error_msg")
+const error_msg = document.getElementById("error_msg")
 
 a_won_btn.addEventListener("click", a_won)
 draw_btn.addEventListener("click", draw)
@@ -24,6 +29,52 @@ b_elo_inpt.addEventListener("input", calc_deltas)
 
 calc_deltas()
 do_list()
+check_account()
+
+
+async function check_account(){
+	const response = await fetch("/api/auth/userinfo", {
+		method: "GET"
+	})
+	
+	let body = null;
+	try {
+		body = await response.json()
+	} catch {
+		error_msg.textContent = `error: bad response`
+	}
+	
+	if (!response.ok){
+		error_response = (body && typeof body.error === 'string' && body.error.trim()) || `no error response`
+		error_msg.textContent = `eror ${response.status}: ${error_response}`
+		return
+	}
+	
+	var exists = body.exists
+	let userstring = "not logged in"
+	if (exists){
+		login_link.textContent = ""
+		logout_link.textContent = "Log out"
+		register_link.textContent = ""
+
+		if (body.username){
+			userstring = body.username
+		}
+		if (body.email){
+			userstring = userstring + ", " + body.email
+		}
+		if (body.created_at){
+			userstring = userstring + ", " + body.created_at
+		}
+	}else{
+		login_link.textContent = "Log in"
+		logout_link.textContent =	""
+		register_link.textContent = "register"
+	}
+	
+	account_name.textContent = userstring
+
+}
 
 async function game(K, a_elo, b_elo, score_a){
 	const response = await fetch("/api/game", {

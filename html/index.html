@@ -9,13 +9,27 @@
 </head>
 
 <body>
-	<div class="panel">
+	<div class="top-bar">
+		<div class="account">
+			<p id="account_name"></p>
+		</div>
+		<div class="login">
+			<a href="/login" id="login"></a>
+		</div>
+		<div class="logout">
+			<a href="/api/auth/logout" id="logout"></a>
+		</div>
+		<div class="register">
+			<a href="/register" id="register"></a>
+		</div>
+	</div>
+  <div class="panel">
 		<div class="input">
 			<input id="a_elo" placeholder="player a elo">
 			<input id="b_elo" placeholder="player b elo">
 		</div>
 		<div class="grid">
-			<div class="cell">			
+			<div class="cell">
 				<button id="a_won">Player A won</button>
 				<p class="label" id="a_won_delta"></p>
 			</div>
@@ -35,34 +49,6 @@
 	
 	<div class="database">
 		<ul id="transactions" class="transactions">
-			<li>hello</li>
-			<li>hello</li>
-			<li>hello</li>
-			<li>hello</li>
-			<li>hello</li>
-			<li>hello</li>
-			<li>hello</li>
-			<li>hello</li>
-			<li>hello</li>
-			<li>hello</li>
-			<li>hello</li>
-			<li>hello</li>
-			<li>hello</li>
-			<li>hello</li>
-			<li>hello</li>
-			<li>hello</li>
-			<li>hello</li>
-			<li>hello</li>
-			<li>hello</li>
-			<li>hello</li>
-			<li>hello</li>
-			<li>hello</li>
-			<li>hello</li>
-			<li>hello</li>
-			<li>hello</li>
-			<li>hello</li>
-			<li>hello</li>
-			<li>hello</li>
 		</ul>
 	</div>
 	

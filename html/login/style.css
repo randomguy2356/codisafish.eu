@@ -12,8 +12,7 @@ body {
   align-items: center;
   min-width: 300px;
   width: 40vw;
-  min-height: fit-content;
-  height: 40vh;
+  height: max(40vh, 300px);
   border: 1px solid #555;
   border-radius: 10px;
 }
