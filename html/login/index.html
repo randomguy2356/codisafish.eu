@@ -1,18 +1,18 @@
 <!DOCTYPE html>
 
-<html lang=en>
+<html lang="en">
 <head>
 	<meta charset="UTF-8">
 	<title>log in</title>
-	<meta name="viewport" content="width=device_width, initial-scale=1" />
+	<meta name="viewport" content="width=device_width, initial-scale=1">
 	<link rel="stylesheet" href="./style.css">
 </head>
 
 <body>
   <div class="panel">
-    <input id="username" placeholder="username">
-    <input id="password" type="password" placeholder="password">
-    <button id="login">log in</button>
+    <input type="text" id="username" placeholder="username">
+    <input id="password" type="password" autocomplete="current-password" placeholder="password">
+    <button type="submit" id="login">log in</button>
   </div>
   <div>
     <p class="error" id="error_msg"></p>
@@ -20,6 +20,7 @@
   <div>
     <p id="msg"></p>
   </div>
+<script src="./script.js"></script>
 </body>
 
-<script src="./script.js"></script>
+</html>

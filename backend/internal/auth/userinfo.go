@@ -9,12 +9,11 @@ import (
 )
 
 type userinfoResponse struct {
-	Exists    bool    `json:"exists"`
-	Username  string  `json:"username,omitempty"`
-	Email     string  `json:"email,omitempty"`
-	Elo       float64 `json:"elo,omitempty"`
-	CreatedAt string  `json:"created_at,omitempty"`
-	Error     string  `json:"error,omitempty"`
+	Exists    bool   `json:"exists"`
+	Username  string `json:"username,omitempty"`
+	Email     string `json:"email,omitempty"`
+	CreatedAt string `json:"created_at,omitempty"`
+	Error     string `json:"error,omitempty"`
 }
 
 func (handler *UserinfoHandler) ServeHTTP(writer http.ResponseWriter, request *http.Request) {
@@ -32,7 +31,7 @@ func (handler *UserinfoHandler) ServeHTTP(writer http.ResponseWriter, request *h
 			return
 		}
 		httpx.WriteJSON(writer, http.StatusBadRequest, userinfoResponse{
-			Error: "cookie read error: " + err.Error(),
+			Error: "cookie read error",
 		})
 		return
 	}
@@ -50,7 +49,7 @@ func (handler *UserinfoHandler) ServeHTTP(writer http.ResponseWriter, request *h
 
 	if err != nil {
 		httpx.WriteJSON(writer, http.StatusInternalServerError, userinfoResponse{
-			Error: "failed while doing db stuff: " + err.Error(),
+			Error: "failed while doing db stuff :(",
 		})
 		return
 	}
@@ -65,7 +64,6 @@ func (handler *UserinfoHandler) ServeHTTP(writer http.ResponseWriter, request *h
 		Exists:    true,
 		Username:  userinfo.Username,
 		Email:     userinfo.Email,
-		Elo:       userinfo.Elo,
 		CreatedAt: userinfo.CreatedAt.Time.String(),
 	})
 
@@ -76,7 +74,6 @@ type DBUserInfo struct {
 	Username     string
 	Email        string
 	PasswordHash string
-	Elo          float64
 	CreatedAt    sql.NullTime
 }
 
@@ -87,7 +84,7 @@ func GetUserInfo(username string, db *sql.DB, context context.Context) (userinfo
 
 	userinfo = &DBUserInfo{}
 
-	err = row.Scan(&userinfo.ID, &userinfo.Username, &userinfo.Email, &userinfo.PasswordHash, &userinfo.Elo, &userinfo.CreatedAt)
+	err = row.Scan(&userinfo.ID, &userinfo.Username, &userinfo.Email, &userinfo.PasswordHash, &userinfo.CreatedAt)
 
 	if err != nil {
 		if err == sql.ErrNoRows {

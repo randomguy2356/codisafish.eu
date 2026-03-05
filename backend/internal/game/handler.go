@@ -52,7 +52,7 @@ func (handler *Handler) ServeHTTP(writer http.ResponseWriter, request *http.Requ
 
 	if err := decoder.Decode(&requestData); err != nil {
 		httpx.WriteJSON(writer, http.StatusBadRequest, GameResponse{
-			Error: "invalid JSON request: " + err.Error(),
+			Error: "invalid JSON request",
 		})
 		return
 	}

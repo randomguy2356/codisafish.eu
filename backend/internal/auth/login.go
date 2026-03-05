@@ -33,7 +33,7 @@ func (handler *LoginHandler) ServeHTTP(writer http.ResponseWriter, request *http
 
 	if err := decoder.Decode(&requestData); err != nil {
 		httpx.WriteJSON(writer, http.StatusBadRequest, loginResponse{
-			Error: "invalid JSON request: " + err.Error(),
+			Error: "invalid JSON request",
 		})
 		return
 	}
@@ -53,7 +53,7 @@ func (handler *LoginHandler) ServeHTTP(writer http.ResponseWriter, request *http
 
 	if err != nil {
 		httpx.WriteJSON(writer, http.StatusInternalServerError, loginResponse{
-			Error: "internal server error: " + err.Error(),
+			Error: "internal server error",
 		})
 		return
 	}

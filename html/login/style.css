@@ -1,20 +1,48 @@
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0;}
+
+:root {
+  --bg:       #f5f4f0;
+  --surface:  #fffffe;
+  --border:   #dde3ee;
+  --blue:     #3a6fdc;
+  --blue-mid: #6b97f0;
+  --blue-pale:#e8eefb;
+  --ink:      #1a1d26;
+  --muted:    #7e8494;
+  --radius:   10px;
+}
+
 body {
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  align-items: center;
+  font-family: 'DM Sans', sans-serif;
+  background-color: var(--bg);
+  color: var(--ink);
   min-height: 100vh;
 }
 
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background-image: 
+    linear-gradient(var(--border) 1px, transparent 1px),
+    linear-gradient(90deg, var(--border) 1px, transparent 1px);
+  background-size: 40px 40px;
+  opacity: 0.35;
+  pointer-events: none;
+  z-index: 0;
+}
+
 .panel{
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
-  min-width: 300px;
-  width: 40vw;
-  height: max(40vh, 300px);
-  border: 1px solid #555;
+  margin: 20px auto;
+  max-width: 400px;
+  background-color: var(--surface);
+  border: 1px solid var(--border);
   border-radius: 10px;
+  z-index: 1;
 }
 
 .panel input {
@@ -22,20 +50,28 @@ body {
   height: fit-content;
   padding: 10px;
   margin: 20px;
-  border: 1px solid #555;
+  border: 1px solid var(--border);
   border-radius: 5px;
-  background-color: #ddd;
+  color: var(--ink);
   font-size: large;
   text-align: left;
+}
+
+.panel input::placeholder {
+  color: var(--muted);
 }
 
 .panel button {
   width: 30%;
   height: 30px;
   margin: 20px;
-  border: 1px solid #aaa;
-  background-color: #eee;
-  border-radius: 15px;
+  border: 1px solid var(--border);
+  background-color: transparent;
+  border-radius: 99px;
+}
+
+.panel button:hover{
+  background-color: var(--blue-pale);
 }
 
 

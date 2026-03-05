@@ -14,7 +14,7 @@ func (handler *LogoutHandler) ServeHTTP(writer http.ResponseWriter, request *htt
 		if err == http.ErrNoCookie {
 			sidcookie = &http.Cookie{Value: ""}
 		} else {
-			http.Error(writer, "cookie error: "+err.Error(), http.StatusBadRequest)
+			http.Error(writer, "cookie error", http.StatusBadRequest)
 			return
 		}
 	}

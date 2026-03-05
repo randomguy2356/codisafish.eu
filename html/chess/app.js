@@ -31,9 +31,6 @@ calc_deltas()
 do_list()
 check_account()
 
-
-
-
 async function game(K, a_elo, b_elo, score_a){
 	const response = await fetch("/api/game", {
 		method: "POST",
