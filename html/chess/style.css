@@ -1,0 +1,93 @@
+body {
+	font-family: Arial, Helvetica, sans-serif;
+	padding: 24px;
+}
+
+.panel {
+	width: fit-content;
+	min-width: min(300px, 100%);
+	border: 1px solid #000;
+	border-radius: 10px;
+	padding: 16px;
+	margin: 10px;
+	
+}
+
+.input {
+	display: grid;
+	grid-template-columns: repeat(2, 150px);
+	column-gap: 10px;
+	padding: 5px;
+}
+
+.input input {
+	width: max(max-content, 200px);
+	height: 40px;
+	font-size: large;
+	text-align: center;
+	padding: 10px, 10px;
+	border: 1px solid #555;
+	background: #e1e1e1;
+	border-radius: 5px;
+	text-overflow: clip;
+}
+
+.grid {
+	display: grid;
+	padding: 5px;
+	grid-template-columns: repeat(3, max-content);
+	justify-content: space-between;
+	column-gap: 10px;
+	row-gap: 10px;
+	align-items: start;
+}
+
+.cell {
+	display: grid;
+	grid-template-rows: auto auto;
+	justify-items: center;
+}
+
+.cell button {
+	width: max-content;
+	padding: 5px 5px;
+	border: 1px solid #555;
+	background: #eeeeee;
+	border-radius: 10px;
+	cursor: pointer;
+	white-space: nowrap;
+}
+
+.cell .label {
+	text-align: center;
+	white-space: break-spaces;
+	font-size: 14px;
+	line-height: 1.2;
+}
+
+.percentage {
+	align-items: center;
+}
+
+.percentage p {
+	text-align: center;
+}
+
+.database {
+	max-height: 300px;
+	max-width: fit-content;
+	overflow-y: auto;
+	border: 1px solid #555;
+	border-radius: 10px;
+	margin: 10px;
+}
+
+.transactions{
+	margin: 10px;
+	padding-left: 20px;
+	padding-right: 20px;
+}
+
+.error {
+	color: red;
+}

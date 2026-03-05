@@ -1,62 +1,61 @@
 <!DOCTYPE html>
-
-<html lang=en>
+<html lang="en">
 <head>
-	<meta charset="UTF-8">
-	<title>Cod is a fish</title>
-	<meta name="viewport" content="width=device_width, initial-scale=1" />
-	<link rel="stylesheet" href="./style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cod is a fish</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./style.css">
 </head>
-
 <body>
-	<div class="top-bar">
-		<div class="account">
-			<p id="account_name"></p>
-		</div>
-		<div class="login">
-			<a href="/login" id="login"></a>
-		</div>
-		<div class="logout">
-			<a href="/api/auth/logout" id="logout"></a>
-		</div>
-		<div class="register">
-			<a href="/register" id="register"></a>
-		</div>
-	</div>
-  <div class="panel">
-		<div class="input">
-			<input id="a_elo" placeholder="player a elo">
-			<input id="b_elo" placeholder="player b elo">
-		</div>
-		<div class="grid">
-			<div class="cell">
-				<button id="a_won">Player A won</button>
-				<p class="label" id="a_won_delta"></p>
-			</div>
-			<div class="cell">
-				<button id="draw">draw</button>
-				<p class="label" id="draw_delta"></p>
-			</div>
-			<div class="cell">
-				<button id="b_won">Player B won</button>
-				<p class="label" id="b_won_delta"></p>
-			</div>
-		</div>
-		<div class="percentage">
-			<p id="expected_score"></p>
-		</div>
-	</div>
-	
-	<div class="database">
-		<ul id="transactions" class="transactions">
-		</ul>
-	</div>
-	
+  <div class="wrapper">
 
+    <header>
+      <div>
+        <div class="header-tag">welcome</div>
+        <h1 class="site-title">my projects</h1>
+      </div>
+      <div class="account">
+        <div class="user_info">
+          <div id="username">codisafish</div>
+        </div>
+        <div class="buttons">
+          <div class="login" id="login">
+            <a class="login_btn" href="/login">login</a>
+          </div>
+          <div class="logout" id="logout">
+            <a class="logout_btn" href="/api/auth/logout">logout</a>
+          </div>
+          <div class="register" id="register">
+            <a class="register_btn" href="/register">register</a>
+          </div>
+        </div>
+      </div>
+    </header>
 
-	<p id="error_msg" class="error"></p>
+    <div class="divider"></div>
 
-	<script src="./app.js" defer></script>
+    <div class="section-label">all projects</div>
 
+    <div class="grid" id="projectGrid">
+      <a href="/chess" class="card">
+        <div class="card-icon">♟️</div>
+        <div class="card-name">Chess</div>
+        <div class="card-desc">Chess is a two player game played on an 8x8 grid</div>
+      </a>
+
+      <div class="card card-placeholder">
+        maybe i'll make more...
+      </div>
+    </div>
+    <footer>
+      <span>made by me :)</span>
+      <div class="footer-dot"></div>
+      <span id="year"></span>
+    </footer>
+  </div>
+  <script src="./script.js"></script>
 </body>
 </html>
+

@@ -32,49 +32,7 @@ do_list()
 check_account()
 
 
-async function check_account(){
-	const response = await fetch("/api/auth/userinfo", {
-		method: "GET"
-	})
-	
-	let body = null;
-	try {
-		body = await response.json()
-	} catch {
-		error_msg.textContent = `error: bad response`
-	}
-	
-	if (!response.ok){
-		error_response = (body && typeof body.error === 'string' && body.error.trim()) || `no error response`
-		error_msg.textContent = `eror ${response.status}: ${error_response}`
-		return
-	}
-	
-	var exists = body.exists
-	let userstring = "not logged in"
-	if (exists){
-		login_link.textContent = ""
-		logout_link.textContent = "Log out"
-		register_link.textContent = ""
 
-		if (body.username){
-			userstring = body.username
-		}
-		if (body.email){
-			userstring = userstring + ", " + body.email
-		}
-		if (body.created_at){
-			userstring = userstring + ", " + body.created_at
-		}
-	}else{
-		login_link.textContent = "Log in"
-		logout_link.textContent =	""
-		register_link.textContent = "register"
-	}
-	
-	account_name.textContent = userstring
-
-}
 
 async function game(K, a_elo, b_elo, score_a){
 	const response = await fetch("/api/game", {
@@ -200,7 +158,7 @@ function b_won(event){
 }
 
 async function do_list(){
-	const response = await fetch("api/transactions", {
+	const response = await fetch("/api/transactions", {
 		method: "POST",
 		headers: {
 			"Content-Type": "application/json"
