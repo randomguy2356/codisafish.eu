@@ -25,15 +25,12 @@ DROP TABLE IF EXISTS `elo_changes`;
 /*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `elo_changes` (
   `id` int(11) NOT NULL,
-  `game_id` int(11) DEFAULT NULL,
   `w_elo` double DEFAULT NULL,
   `b_elo` double DEFAULT NULL,
   `delta` double DEFAULT NULL,
   `w_elo_after` double DEFAULT NULL,
   `b_elo_after` double DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `game_id` (`game_id`),
-  CONSTRAINT `elo_changes_ibfk_1` FOREIGN KEY (`game_id`) REFERENCES `games` (`id`)
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -50,11 +47,14 @@ CREATE TABLE `games` (
   `b_player_id` int(11) NOT NULL,
   `started_at` timestamp NOT NULL,
   `ended_at` timestamp NOT NULL,
+  `elo_change_id` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `w_player_id` (`w_player_id`),
   KEY `b_player_id` (`b_player_id`),
+  KEY `elo_change_id` (`elo_change_id`),
   CONSTRAINT `games_ibfk_1` FOREIGN KEY (`w_player_id`) REFERENCES `users` (`id`),
   CONSTRAINT `games_ibfk_2` FOREIGN KEY (`b_player_id`) REFERENCES `users` (`id`),
+  CONSTRAINT `games_ibfk_3` FOREIGN KEY (`elo_change_id`) REFERENCES `elo_changes` (`id`),
   CONSTRAINT `CONSTRAINT_1` CHECK (`w_player_id` <> `b_player_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -138,4 +138,4 @@ CREATE TABLE `users` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*M!100616 SET NOTE_VERBOSITY=@OLD_NOTE_VERBOSITY */;
 
--- Dump completed on 2026-03-05 20:56:34
+-- Dump completed on 2026-03-06  8:34:24
