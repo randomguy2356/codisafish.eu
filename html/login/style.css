@@ -52,6 +52,7 @@ body::before {
   margin: 20px;
   border: 1px solid var(--border);
   border-radius: 5px;
+  background-color: var(--bg);
   color: var(--ink);
   font-size: large;
   text-align: left;
