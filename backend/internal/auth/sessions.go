@@ -32,12 +32,25 @@ func CreateSession(username string, writer http.ResponseWriter) (sid string) {
 		ExpiresAt:    time.Now().Add(time.Hour),
 		User:         username,
 	}
-	sid = rand.Text()
+	sid = NewUSID()
 	Sessions.Mutex.Lock()
-	defer Sessions.Mutex.Unlock()
 	Sessions.Map[sid] = session
+	Sessions.Mutex.Unlock()
 	SetSIDCookie(writer, sid, time.Hour)
 	return
+}
+
+func NewUSID() string {
+	Sessions.Mutex.RLock()
+	defer Sessions.Mutex.RUnlock()
+	var sid string
+	for {
+		sid = rand.Text()
+		if _, exists := Sessions.Map[sid]; !exists {
+			break
+		}
+	}
+	return sid
 }
 
 func ValidateUser(username string, password string, ctx context.Context, db *sql.DB) (bool, error) {
@@ -80,17 +93,26 @@ func ValidateSID(sid string, writer http.ResponseWriter) *Session {
 		return nil
 	}
 
-	delete(Sessions.Map, sid)
-
-	new_sid := rand.Text()
 	session.ExpiresAt = time.Now().Add(time.Hour)
 
-	Sessions.Map[new_sid] = session
-	println("new_sid: " + new_sid)
-
-	SetSIDCookie(writer, new_sid, time.Hour)
+	Sessions.Map[sid] = session
 
 	return &session
+}
+
+func RotateSid(sid string, writer http.ResponseWriter) *string {
+	Sessions.Mutex.Lock()
+	defer Sessions.Mutex.Unlock()
+	session, exists := Sessions.Map[sid]
+
+	if !exists {
+		return nil
+	}
+
+	sid = NewUSID()
+	Sessions.Map[sid] = session
+
+	return &sid
 }
 
 func InvalidateSID(sid string, writer http.ResponseWriter) {
@@ -111,4 +133,19 @@ func SetSIDCookie(writer http.ResponseWriter, sid string, maxAge time.Duration) 
 		SameSite: http.SameSiteLaxMode,
 		MaxAge:   int(maxAge),
 	})
+}
+
+func CheckSIDCookie(writer http.ResponseWriter, request *http.Request) (bool, error) {
+	sid, err := request.Cookie("sid")
+	if err != http.ErrNoCookie {
+		if err != nil {
+			return false, err
+		}
+		session := ValidateSID(sid.Value, writer)
+		if session != nil {
+			writer.WriteHeader(http.StatusOK)
+			return true, nil
+		}
+	}
+	return false, nil
 }

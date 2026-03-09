@@ -8,6 +8,7 @@ import (
 	"log"
 	"net/http"
 
+	"codisafish.eu/app/internal/httpx"
 	"github.com/alexedwards/argon2id"
 )
 
@@ -20,6 +21,28 @@ type registerRequest struct {
 func (handler *RegisterHandler) ServeHTTP(writer http.ResponseWriter, request *http.Request) {
 	if request.Method != http.MethodPost {
 		http.Error(writer, "method not allowed, use Post", http.StatusMethodNotAllowed)
+		return
+	}
+
+	sid_valid, err := CheckSIDCookie(writer, request)
+	if err != nil {
+		httpx.WriteJSON(writer, http.StatusBadRequest, loginResponse{
+			Error: "bad cookies in request",
+		})
+	}
+	if sid_valid {
+		writer.WriteHeader(http.StatusOK)
+		return
+	}
+
+	sid, err := CheckRMTCookie(handler.DB, writer, request)
+	if err != nil {
+		httpx.WriteJSON(writer, http.StatusBadRequest, loginResponse{
+			Error: "bad cookies in request",
+		})
+	}
+	if sid != "" {
+		writer.WriteHeader(http.StatusOK)
 		return
 	}
 

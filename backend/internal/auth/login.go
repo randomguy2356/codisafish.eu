@@ -9,8 +9,9 @@ import (
 )
 
 type loginRequest struct {
-	Username string `json:"username"`
-	Password string `json:"password"`
+	Username   string `json:"username"`
+	Password   string `json:"password"`
+	RememberMe bool   `json:"remember_me"`
 }
 
 type loginResponse struct {
@@ -23,6 +24,28 @@ func (handler *LoginHandler) ServeHTTP(writer http.ResponseWriter, request *http
 		return
 	}
 	defer request.Body.Close()
+
+	sid_valid, err := CheckSIDCookie(writer, request)
+	if err != nil {
+		httpx.WriteJSON(writer, http.StatusBadRequest, loginResponse{
+			Error: "bad cookies in request",
+		})
+	}
+	if sid_valid {
+		writer.WriteHeader(http.StatusOK)
+		return
+	}
+
+	sid, err := CheckRMTCookie(handler.DB, writer, request)
+	if err != nil {
+		httpx.WriteJSON(writer, http.StatusBadRequest, loginResponse{
+			Error: "bad cookies in request",
+		})
+	}
+	if sid != "" {
+		writer.WriteHeader(http.StatusOK)
+		return
+	}
 
 	request.Body = http.MaxBytesReader(writer, request.Body, 1<<20)
 
@@ -64,6 +87,16 @@ func (handler *LoginHandler) ServeHTTP(writer http.ResponseWriter, request *http
 	}
 
 	CreateSession(requestData.Username, writer)
+
+	if requestData.RememberMe {
+		err := CreateRememberToken(requestData.Username, handler.DB, request.Context(), writer)
+		if err != nil {
+			httpx.WriteJSON(writer, http.StatusInternalServerError, loginResponse{
+				Error: "internal server error",
+			})
+			return
+		}
+	}
 
 	writer.WriteHeader(http.StatusOK)
 }

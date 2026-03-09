@@ -2,6 +2,7 @@ const login_btn = document.getElementById("login")
 
 const username_inpt = document.getElementById("username")
 const password_inpt = document.getElementById("password")
+const remember_me_box = document.getElementById("remember_me")
 
 const error_msg = document.getElementById("error_msg")
 const msg = document.getElementById("msg")
@@ -38,7 +39,7 @@ async function log_in(event){
     headers: {
   		"Content-Type": "application/json"
     },
-    body: JSON.stringify({username: username_inpt.value, password: password_inpt.value})
+    body: JSON.stringify({username: username_inpt.value, password: password_inpt.value, remember_me: remember_me_box.checked})
   })
   
   let body = null;

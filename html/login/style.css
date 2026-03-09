@@ -71,6 +71,19 @@ body::before {
   border-radius: 99px;
 }
 
+.remember_me {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  gap: 10px;
+}
+
+.remember_me input {
+  width: 14px;
+  height: 14px;
+  margin: 0;
+}
+
 .panel button:hover{
   background-color: var(--blue-pale);
 }
