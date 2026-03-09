@@ -19,24 +19,25 @@ type userinfoResponse struct {
 func (handler *UserinfoHandler) ServeHTTP(writer http.ResponseWriter, request *http.Request) {
 	if request.Method != http.MethodGet {
 		http.Error(writer, "method not allowed", http.StatusMethodNotAllowed)
+		return
 	}
 
 	clientSID, err := request.Cookie("sid")
 
 	if err == http.ErrNoCookie {
+		clientSID = &http.Cookie{Name: "sid", Value: ""}
 		sid, err := CheckRMTCookie(handler.DB, writer, request)
 		if err != nil {
 			httpx.WriteJSON(writer, http.StatusInternalServerError, userinfoResponse{
 				Error: "internal server error",
 			})
+			println("check rmt cookie failed with error: ", err.Error())
+			return
 		}
 		if sid != "" {
 			clientSID.Value = sid
-			err = nil
 		}
-	}
-
-	if err != nil {
+	} else if err != nil {
 		httpx.WriteJSON(writer, http.StatusBadRequest, userinfoResponse{
 			Error: "cookie read error",
 		})
@@ -73,7 +74,6 @@ func (handler *UserinfoHandler) ServeHTTP(writer http.ResponseWriter, request *h
 		Email:     userinfo.Email,
 		CreatedAt: userinfo.CreatedAt.Time.String(),
 	})
-
 }
 
 type DBUserInfo struct {

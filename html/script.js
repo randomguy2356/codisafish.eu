@@ -23,12 +23,12 @@ async function check_account(){
 	try {
 		body = await response.json()
 	} catch {
-		error_msg.textContent = `error: bad response`
+		console.log(`error: bad response`)
 	}
 	
 	if (!response.ok){
 		error_response = (body && typeof body.error === 'string' && body.error.trim()) || `no error response`
-		error_msg.textContent = `eror ${response.status}: ${error_response}`
+		console.log(`eror ${response.status}: ${error_response}`)
 		return
 	}
 	

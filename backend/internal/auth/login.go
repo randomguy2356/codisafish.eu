@@ -30,6 +30,7 @@ func (handler *LoginHandler) ServeHTTP(writer http.ResponseWriter, request *http
 		httpx.WriteJSON(writer, http.StatusBadRequest, loginResponse{
 			Error: "bad cookies in request",
 		})
+		return
 	}
 	if sid_valid {
 		writer.WriteHeader(http.StatusOK)
@@ -41,6 +42,7 @@ func (handler *LoginHandler) ServeHTTP(writer http.ResponseWriter, request *http
 		httpx.WriteJSON(writer, http.StatusBadRequest, loginResponse{
 			Error: "bad cookies in request",
 		})
+		return
 	}
 	if sid != "" {
 		writer.WriteHeader(http.StatusOK)

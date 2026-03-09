@@ -48,6 +48,26 @@ func CreateRememberToken(username string, db *sql.DB, context context.Context, w
 	return nil
 }
 
+func ValidateRMT(rmt string, db *sql.DB, context context.Context) (*string, error) {
+	token_hash := HashToken(rmt)
+	query := "SELECT users.username FROM remember_me JOIN users ON remember_me.user_id=users.id WHERE token_hash=?"
+
+	row := db.QueryRowContext(context, query, token_hash)
+
+	var username string
+	if err := row.Scan(&username); err != nil {
+		if err == sql.ErrNoRows {
+			return nil, nil
+		}
+		return nil, err
+	}
+	return &username, nil
+}
+
+func InvalidateRMT(rmt string, db *sql.DB, writer http.ResponseWriter) {
+
+}
+
 func SetRememberCookie(writer http.ResponseWriter, token string, maxAge time.Duration) {
 	http.SetCookie(writer, &http.Cookie{
 		Name:     "rmt",

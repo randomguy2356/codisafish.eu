@@ -1,7 +1,6 @@
 package auth
 
 import (
-	"context"
 	"database/sql"
 	"net/http"
 )
@@ -30,22 +29,6 @@ func (handler *checkRMTHandler) ServeHTTP(writer http.ResponseWriter, request *h
 	}
 	CreateSession(*username, writer)
 	writer.WriteHeader(http.StatusOK)
-}
-
-func ValidateRMT(rmt string, db *sql.DB, context context.Context) (*string, error) {
-	token_hash := HashToken(rmt)
-	query := "SELECT users.username FROM remember_me JOIN users ON remember_me.user_id=users.id WHERE token_hash=?"
-
-	row := db.QueryRowContext(context, query, token_hash)
-
-	var username *string = nil
-	if err := row.Scan(username); err != nil {
-		if err == sql.ErrNoRows {
-			return nil, nil
-		}
-		return nil, err
-	}
-	return username, nil
 }
 
 func CheckRMTCookie(db *sql.DB, writer http.ResponseWriter, request *http.Request) (string, error) {
