@@ -25,18 +25,10 @@ func (handler *UserinfoHandler) ServeHTTP(writer http.ResponseWriter, request *h
 	clientSID, err := request.Cookie("sid")
 
 	if err == http.ErrNoCookie {
-		clientSID = &http.Cookie{Name: "sid", Value: ""}
-		sid, err := CheckRMTCookie(handler.DB, writer, request)
-		if err != nil {
-			httpx.WriteJSON(writer, http.StatusInternalServerError, userinfoResponse{
-				Error: "internal server error",
-			})
-			println("check rmt cookie failed with error: ", err.Error())
-			return
-		}
-		if sid != "" {
-			clientSID.Value = sid
-		}
+		httpx.WriteJSON(writer, http.StatusOK, userinfoResponse{
+			Exists: false,
+		})
+		return
 	} else if err != nil {
 		httpx.WriteJSON(writer, http.StatusBadRequest, userinfoResponse{
 			Error: "cookie read error",

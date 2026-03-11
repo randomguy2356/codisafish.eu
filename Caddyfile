@@ -1,5 +1,4 @@
-localhost {
-	tls internal
+codisafish.eu {
 	root * /srv
 	file_server
 

@@ -35,17 +35,6 @@ func (handler *RegisterHandler) ServeHTTP(writer http.ResponseWriter, request *h
 		return
 	}
 
-	sid, err := CheckRMTCookie(handler.DB, writer, request)
-	if err != nil {
-		httpx.WriteJSON(writer, http.StatusBadRequest, loginResponse{
-			Error: "bad cookies in request",
-		})
-	}
-	if sid != "" {
-		writer.WriteHeader(http.StatusOK)
-		return
-	}
-
 	decoder := json.NewDecoder(request.Body)
 	decoder.DisallowUnknownFields()
 

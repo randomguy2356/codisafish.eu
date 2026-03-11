@@ -37,18 +37,6 @@ func (handler *LoginHandler) ServeHTTP(writer http.ResponseWriter, request *http
 		return
 	}
 
-	sid, err := CheckRMTCookie(handler.DB, writer, request)
-	if err != nil {
-		httpx.WriteJSON(writer, http.StatusBadRequest, loginResponse{
-			Error: "bad cookies in request",
-		})
-		return
-	}
-	if sid != "" {
-		writer.WriteHeader(http.StatusOK)
-		return
-	}
-
 	request.Body = http.MaxBytesReader(writer, request.Body, 1<<20)
 
 	var requestData loginRequest
@@ -90,15 +78,15 @@ func (handler *LoginHandler) ServeHTTP(writer http.ResponseWriter, request *http
 
 	CreateSession(requestData.Username, writer)
 
-	if requestData.RememberMe {
-		err := CreateRememberToken(requestData.Username, handler.DB, request.Context(), writer)
-		if err != nil {
-			httpx.WriteJSON(writer, http.StatusInternalServerError, loginResponse{
-				Error: "internal server error",
-			})
-			return
-		}
-	}
+	//	if requestData.RememberMe {
+	//		err := CreateRememberToken(requestData.Username, handler.DB, request.Context(), writer)
+	//		if err != nil {
+	//			httpx.WriteJSON(writer, http.StatusInternalServerError, loginResponse{
+	//				Error: "internal server error",
+	//			})
+	//			return
+	//		}
+	//	}
 
 	writer.WriteHeader(http.StatusOK)
 }

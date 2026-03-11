@@ -131,7 +131,7 @@ func SetSIDCookie(writer http.ResponseWriter, sid string, maxAge time.Duration) 
 		HttpOnly: true,
 		Secure:   true,
 		SameSite: http.SameSiteLaxMode,
-		MaxAge:   int(maxAge),
+		MaxAge:   int(maxAge.Seconds()),
 	})
 }
 
