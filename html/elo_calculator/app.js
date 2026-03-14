@@ -29,7 +29,7 @@ b_elo_inpt.addEventListener("input", calc_deltas)
 
 calc_deltas()
 do_list()
-check_account()
+//check_account()
 
 async function game(K, a_elo, b_elo, score_a){
 	const response = await fetch("/api/game", {
@@ -66,24 +66,24 @@ async function game(K, a_elo, b_elo, score_a){
 }
 
 function calc_deltas(){
-	a_elo_raw = Number.isFinite(Number(a_elo_inpt.value))? Number(a_elo_inpt.value) : 0
-	b_elo_raw = Number.isFinite(Number(b_elo_inpt.value))? Number(b_elo_inpt.value) : 0
-	a_elo = Math.max(a_elo_raw, 10)
-	b_elo = Math.max(b_elo_raw , 10)
+	var a_elo_raw = Number.isFinite(Number(a_elo_inpt.value))? Number(a_elo_inpt.value) : 0
+	var b_elo_raw = Number.isFinite(Number(b_elo_inpt.value))? Number(b_elo_inpt.value) : 0
+	var a_elo = Math.max(a_elo_raw, 10)
+	var b_elo = Math.max(b_elo_raw , 10)
 	
-	k = 32
+	var k = 32
 
-	expected_score_a = 1 / (1 + (10 ** ((b_elo - a_elo) / 400)))
+	var expected_score_a = 1 / (1 + (10 ** ((b_elo - a_elo) / 400)))
 	
-	expected_score_percent = ((Math.round(expected_score_a * 10000)) / 100.0)
+	var expected_score_percent = ((Math.round(expected_score_a * 10000)) / 100.0)
 	expected_score_lable.textContent = "" + Number(expected_score_percent.toFixed(2)).toString() + " / " + Number((100 - expected_score_percent).toFixed(2)).toString()
 	
-	a_won_a_delta = k * (1 - expected_score_a)
-	draw_a_delta = k * (0.5 - expected_score_a)
-	b_won_a_delta = k * (0 - expected_score_a)
+	var a_won_a_delta = k * (1 - expected_score_a)
+	var draw_a_delta = k * (0.5 - expected_score_a)
+	var b_won_a_delta = k * (0 - expected_score_a)
 
-	a_delta_min = -(a_elo - 10)
-	a_delta_max = b_elo - 10
+	var a_delta_min = -(a_elo - 10)
+	var a_delta_max = b_elo - 10
 
 	a_won_a_delta = Math.min(Math.max(a_won_a_delta, a_delta_min), a_delta_max)
 	draw_a_delta = Math.min(Math.max(draw_a_delta, a_delta_min), a_delta_max)

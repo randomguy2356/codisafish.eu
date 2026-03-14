@@ -258,3 +258,75 @@ header {
   opacity: 0;
   animation: fadeUp 0.4s ease 0.15s forwards;
 }
+
+
+/*
+
+NOTIFICATIONS!!!!!
+
+*/
+
+.notifications {
+  position: absolute;
+  z-index: 2;
+  top: 10px;
+  left: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+@keyframes pop-in-out{
+  0%   { opacity: 0; transform: translateX(-10px) }
+  5%   { opacity: 1; transform: translateX(0) }
+  90%  { opacity: 1; transform: translateX(0) }
+  100% { opacity: 0; transform: translateX(-10px) }
+}
+
+.notification {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  height: fit-content;
+  width: fit-content;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  background-color: var(--surface);
+  border-radius: var(--radius);
+  padding: 10px;
+  box-shadow: 0 0 28px rgba(58, 111, 220, 0.12);
+  animation: pop-in-out 5000ms ease forwards;
+}
+
+.notification::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--blue), var(--blue-mid));
+}
+
+.buttons {
+  display: flex;
+  align-self: flex-end;
+  gap: 20px;
+}
+
+.accept_btn {
+  border: none;
+  border-radius: var(--radius);
+  background-color: rgb(108, 182, 108);
+  color: var(--surface);
+  padding: 5px 40px;
+}
+
+.decline_btn {
+  border: none;
+  border-radius: var(--radius);
+  background-color: rgb(210, 80, 80);
+  color: var(--surface);
+  padding: 5px 40px;
+}
+

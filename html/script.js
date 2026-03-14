@@ -1,3 +1,5 @@
+import {connect} from "./common_scripts/sse_connect.js"
+
 const year = document.getElementById("year")
 
 const login_btn = document.getElementById("login")
@@ -6,6 +8,8 @@ const register_btn = document.getElementById("register")
 
 const username = document.getElementById("username")
 
+const notification_ul = document.getElementById("notifications")
+
 load()
 
 function load(){  
@@ -13,6 +17,34 @@ function load(){
   
   check_account()
 }
+
+function showNotification(user) {
+	const element = document.createElement("li")
+  element.className = "notification"
+	element.textContent = `you've been invited by user ${user}`
+	
+	const buttons = document.createElement("div")
+	buttons.className = "buttons"
+	
+	const accept_btn = document.createElement("button")
+	accept_btn.textContent = "✔"
+	accept_btn.className = "accept_btn"
+	const decline_btn = document.createElement("button")
+	decline_btn.textContent = "X"
+	decline_btn.className = "decline_btn"
+	
+	buttons.append(accept_btn)
+	buttons.append(decline_btn)
+
+	element.append(buttons)
+
+
+
+  notification_ul.prepend(element)
+  setTimeout(() => element.remove(), 5000)
+}
+
+connect(showNotification)
 
 async function check_account(){
 	const response = await fetch("/api/auth/userinfo", {
