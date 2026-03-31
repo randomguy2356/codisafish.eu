@@ -1,9 +1,7 @@
-codisafish.eu {
+:80 {
 	root * /srv
 	file_server
 
-	encode zstd gzip
-	
 	@js path *.js
     header @js Cache-Control "no-store"
 

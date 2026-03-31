@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device_width, initial-scale=1">
+  <title>Cod is a fish</title>
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@300;400;500&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="./style.css">
+</head>
+
+<body>
+  <div id="login_screen" class="login_screen">
+    <form id="login_form" class="login_panel">
+      <input type="text" id="username" placeholder="username">
+      <input id="password" type="password" autocomplete="current-password" placeholder="password">
+      <button type="submit" id="login">log in</button>
+    </form>
+    <div>
+      <p class="error" id="error_msg"></p>
+    </div>
+    <div>
+      <p id="msg"></p>
+    </div>
+  </div>
+  <div class="wrapper">
+    <header>
+      <div class="title-tag">game</div>
+      <div class="title">Chess</div>
+    </header>
+    <div class="divider"></div>
+    <div class="section-tag">menu</div>
+    <div class="option-grid">
+      <div class="card" id="new_game">
+        <img class="icon" src="/resources/add-user-icon.svg" alt="add-user-icon">
+        <div class="label">new game</div>
+      </div>
+      <div class="card" id="user_list">
+        <img class="icon" src="/resources/group-icon.svg" alt="user-list-icon">
+        <div class="label">user list</div>
+      </div>
+      <div class="card" id="game_history">
+        <img class="icon" src="/resources/chess-icon.svg" alt="game-history-icon">
+        <div class="label">games</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="new_game_prompt">
+    <form>
+      <input type="checkbox" id="play_white">
+      <input type="text" id="user" placeholder="user">
+      <button type="submit">invite player</button>
+    </form>
+  </div>
+  <script type="module" src="./script.js"></script>
+  <script type="module" src="./login.js"></script>
+</body>
+
+</html>

@@ -7,6 +7,11 @@ const error_msg = document.getElementById("error_msg")
 const msg = document.getElementById("msg")
 
 login_btn.addEventListener("click", log_in)
+document.addEventListener("keydown", (e) => {
+  if (e.key === "Enter") {
+    login_btn.click()
+  }
+})
 
 check_user()
 
@@ -36,7 +41,7 @@ async function log_in(event){
   const response = await fetch("/api/auth/login", {
     method: "POST",
     headers: {
-  		"Content-Type": "application/json"
+      "Content-Type": "application/json"
     },
     body: JSON.stringify({username: username_inpt.value, password: password_inpt.value})
   })
